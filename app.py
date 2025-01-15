@@ -48,8 +48,9 @@ async def transcribe_audios(file: UploadFile = File(...), language: str = "Engli
     text_result = await transcribe_audio(unique_filename)
     transcription_filename = f"texts/{unique_code}_{file_name}.txt"
     with open(transcription_filename, "w", encoding="utf-8") as f:
-        f.write(text_result) 
-    # os.remove(unique_filename)
+        f.write(text_result)
+    os.remove(unique_filename)
+    os.remove(transcription_filename)
     
     report_html = await generate_report(transcription_filename, database=database, language=language)
     report_pdf = create_pdf_from_html(report_html)

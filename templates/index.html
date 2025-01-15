@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .form-container {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+        }
+        form {
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 400px;
+        }
+        select, input[type="file"] {
+            padding: 8px;
+        }
+        button {
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        #pdfViewer {
+            display: none;
+            width: 100%;
+            height: 800px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generate Report from Audio file</h1>
+        <div class="form-container">
+            <form method="post" action="/report-generate" enctype="multipart/form-data" id="uploadForm">
+                <label for="file">Choose audio file:</label>
+                <input type="file" name="file" id="file" accept="audio/*" required />
+                <label for="language">Select language:</label>
+                <select name="language" id="language">
+                    <option value="English">English</option>
+                    <option value="Vietnamese">Vietnamese</option>
+                </select>
+                <button type="submit">Generate PDF</button>
+            </form>
+        </div>
+        
+        <div id="loading">
+            <p>Generating PDF... Please wait...</p>
+        </div>
+        
+        <iframe id="pdfViewer"></iframe>
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const form = e.target;
+            const loading = document.getElementById('loading');
+            const pdfViewer = document.getElementById('pdfViewer');
+            
+            // Show loading
+            loading.style.display = 'block';
+            pdfViewer.style.display = 'none';
+            
+            try {
+                const formData = new FormData(form);
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = URL.createObjectURL(blob);
+                    pdfViewer.src = url;
+                    pdfViewer.style.display = 'block';
+                } else {
+                    alert('Error generating PDF. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error generating PDF. Please try again.');
+            } finally {
+                loading.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
