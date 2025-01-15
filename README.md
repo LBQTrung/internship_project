@@ -1,6 +1,6 @@
 # Whisper Transcription Service
 
-This project is a web-based transcription service using FastAPI and OpenAI's Whisper model. It allows users to upload audio files and receive transcriptions.
+This project is a web-based transcription service using FastAPI, Faster-Whisper model, Gemini 1.5 Flash. It allows users to upload audio files and create report from this audio file.
 
 ## Project Structure
 
@@ -43,14 +43,19 @@ This project is a web-based transcription service using FastAPI and OpenAI's Whi
 
 1. Open the application in your browser.
 2. Upload audio files using the provided interface.
-3. Click the "Transcribe" button to receive the transcriptions.
+3. Click the "Generate" button to receive the report.
+
+## Custom Report Format
+
+You can access the `prompts` directory in `models` to customize the report format by describing the details of your report template.
 
 ## Dependencies
 
 - FastAPI
-- Whisper
+- Faster-Whisper
 - Torch
 - Uvicorn
+- Gemini-1.5-flash-002 (Google AI Studio)
 
 ## License
 
